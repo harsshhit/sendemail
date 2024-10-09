@@ -1,80 +1,52 @@
-/* eslint-disable no-undef */
 const express = require("express");
-const cors = require("cors");
 const nodemailer = require("nodemailer");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-
+const cors = require("cors");
+const path = require("path");
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // To parse incoming form data
 
-mongoose.connect("mongodb://localhost:27017/talk-to-us", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Route to handle form submission
+app.post("/send-email", (req, res) => {
+  const { name, email } = req.body;
 
-const notesSchema = new mongoose.Schema(
-  {
-    title: String,
-    content: String,
-  },
-  { collection: "responses" }
-);
-
-const Note = mongoose.model("Note", notesSchema);
-
-app.get("/", function (req, res) {
-  res.sendFile(__dirname + "/TalkToUs.jsx");
-});
-
-app.get("/", (req, res) => {
-  res.send("Backend Server Running");
-});
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "marketing@houseofmarktech.com", // Replace with your email
-    pass: "qipw jimu taij lthn", // Replace with your email password
-  },
-});
-
-app.post("/", function (req, res) {
-  let newNote = new Note({
-    fullName: req.body.fullName,
-    phoneNumber: req.body.phoneNumber,
-    workEmail: req.body.workEmail,
-    brandWebsite: req.body.brandWebsite,
-    campaignBudget: req.body.campaignBudget,
-    campaignStartDate: req.body.campaignStartDate,
-    howDidYouHear: req.body.howDidYouHear,
-    campaignObjective: req.body.campaignObjective,
+  // Create a Nodemailer transporter
+  const transporter = nodemailer.createTransport({
+    service: "Gmail", // You can use other services like Outlook, etc.
+    auth: {
+      user: "marketing@houseofmarktech.com", // Replace with your email
+      pass: "qipw jimu taij lthn", // Replace with your email password
+    },
   });
-  newNote
-    .save()
-    .then(() => res.redirect("/"))
-    .catch((err) => res.status(500).send(err));
+
+  // Define the email options
+  const mailOptions = {
+    from: "marketing@houseofmarktech.com", // Sender address
+    to: email, // Recipient email
+    subject: `Proposal for ${name}`,
+    text: `Hello ${name},\n\nPlease find the attached proposal document.`,
+    attachments: [
+      {
+        filename: "proposal.pdf",
+        path: path.join(__dirname, "proposal.pdf"), // Path to the PDF file on your server
+      },
+    ],
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ message: "Failed to send email" });
+    } else {
+      console.log("Email sent: " + info.response);
+      res.status(200).json({ message: "Email sent successfully" });
+    }
+  });
 });
 
-// Updated /subscribe route
-app.post("/subscribe", async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    // Send subscription confirmation email
-    await transporter.sendMail({
-      from: '"House of Marktech" <marketing@houseofmarktech.com>',
-      to: email,
-    });
-
-    res.status(200).json({ message: "Subscription Successful" });
-  } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ message: "Error processing subscription" });
-  }
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
