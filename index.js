@@ -15,14 +15,14 @@ app.post("/send-email", (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "Gmail", // You can use other services like Outlook, etc.
     auth: {
-      user: "monumou912@gmail.com", // Replace with your email
-      pass: "gfkr zqsm bfvn mfvq", // Replace with your email password
+      user: "marketing@houseofmarktech.com", // Replace with your email
+      pass: "qipw jimu taij lthn", // Replace with your email password
     },
   });
 
   // Define the email options
   const mailOptions = {
-    from: "monumou912@gmail.com", // Sender address
+    from: "marketing@houseofmarktech.com", // Sender address
     to: email, // Recipient email
     subject: `Proposal for ${name}`,
     text: `Hello ${name},\n\nPlease find the attached proposal document.`,
