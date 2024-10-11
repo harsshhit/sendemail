@@ -25,13 +25,13 @@ app.post("/send-email", (req, res) => {
     from: "marketing@houseofmarktech.com", // Sender address
     to: email, // Recipient email
     subject: `Proposal for ${name}`,
-    text: `Hello ${name},\n\nPlease find the attached proposal document.`,
-    attachments: [
-      {
-        filename: "proposal.pdf",
-        path: path.join(__dirname, "proposal.pdf"), // Path to the PDF file on your server
-      },
-    ],
+    text: `Hello ${name},\n\nPlease find the attached proposal document. Here is our proposal link: https://drive.google.com/file/d/1O7WD7Sev7TDl8lb_Bgb00X1XOBTVL4rU/view?usp=sharing`,
+    // attachments: [
+    //   {
+    //     filename: "proposal.pdf",
+    //     path: path.join(__dirname, "proposal.pdf"), // Path to the PDF file on your server
+    //   },
+    // ],
   };
 
   // Send the email
