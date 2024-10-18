@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "��#\u0000 \u0000s\u0000e\u0000n\u0000d\u0000e\u0000m\u0000a\u0000i\u0000l\u0000\r\u0000 \u0000",
   "dependencies": {
     "@sendgrid/mail": "^8.1.3",
     "backend": "file:",
@@ -18,5 +18,6 @@
     "express": "^4.21.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15"
-  }
+  },
+  "devDependencies": {}
 }

@@ -16,7 +16,7 @@ app.post("/send-email", (req, res) => {
     service: "Gmail", // You can use other services like Outlook, etc.
     auth: {
       user: "marketing@houseofmarktech.com", // Replace with your email
-      pass: "qipw jimu taij lthn", // Replace with your email password
+      pass: "bvdn rcqv hzsx cxyx", // Replace with your email password
     },
   });
 
